@@ -47,7 +47,6 @@ public class DataRetriever {
         }
     }
 
-    // DishIngredient + Ingredient join
     private List<DishIngredient> findDishIngredientsByDishId(Integer dishId) {
         DBConnection dbConnection = new DBConnection();
         Connection connection = dbConnection.getConnection();
@@ -138,7 +137,6 @@ public class DataRetriever {
                 }
             }
 
-            // Remplacer les liens dish_ingredient
             deleteDishIngredients(conn, dishId);
             insertDishIngredients(conn, dishId, toSave.getDishIngredients());
 
