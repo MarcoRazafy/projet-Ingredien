@@ -158,7 +158,7 @@ public class DataRetriever {
     }
 
     private void insertDishIngredients(Connection conn, Integer dishId, List<DishIngredient> dishIngredients)
-            throws SQLException {
+            throws SQLException, RuntimeException {
 
         if (dishIngredients == null || dishIngredients.isEmpty()) {
             return;
