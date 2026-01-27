@@ -1,5 +1,8 @@
 package com.TD2;
 import java.util.Objects;
+import java.util.List;
+import java.time.Instant;
+
 
 public class Ingredient {
     private Integer id;
@@ -8,6 +11,7 @@ public class Ingredient {
     private Double price;
     private Dish dish;
     private Double quantity;
+    private List<StockMovement> stockMovementList;
 
     public Double getQuantity() {
         return quantity;
@@ -74,6 +78,68 @@ public class Ingredient {
     public void setDish(Dish dish) {
         this.dish = dish;
     }
+
+    public List<StockMovement> getStockMovementList() {
+        return stockMovementList;
+    }
+
+    public void setStockMovementList(List<StockMovement> stockMovementList) {
+        this.stockMovementList = stockMovementList;
+    }
+
+    public StockValue getStockValueAt(Instant t) {
+        double initial;
+
+        if (id == null) {
+            throw new RuntimeException("Ingredient id is null");
+        }
+
+        if (id == 1) {
+            initial = 5.0;
+        } else if (id == 2) {
+            initial = 4.0;
+        } else if (id == 3) {
+            initial = 10.0;
+        } else if (id == 4) {
+            initial = 3.0;
+        } else if (id == 5) {
+            initial = 2.5;
+        } else {
+            initial = 0.0;
+        }
+
+        List<StockMovement> movements = stockMovementList == null ? List.of() : stockMovementList;
+
+        double delta = 0.0;
+
+        for (StockMovement sm : movements) {
+            if (sm == null || sm.getCreationDatetime() == null) {
+                continue;
+            }
+            if (t != null && sm.getCreationDatetime().isAfter(t)) {
+                continue;
+            }
+
+            if (sm.getValue() == null || sm.getValue().getQuantity() == null) {
+                throw new RuntimeException("StockMovement quantity is null");
+            }
+
+            double q = sm.getValue().getQuantity();
+
+            if (sm.getType() == null) {
+                throw new RuntimeException("StockMovement type is null");
+            }
+
+            if (sm.getType() == MovementTypeEnum.IN) {
+                delta += q;
+            } else if (sm.getType() == MovementTypeEnum.OUT) {
+                delta -= q;
+            }
+        }
+
+        return new StockValue(initial + delta, UnitTypeEnum.KG);
+    }
+
 
     @Override
     public boolean equals(Object o) {

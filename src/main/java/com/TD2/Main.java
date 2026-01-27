@@ -1,25 +1,28 @@
 package com.TD2;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 public class Main {
     public static void main(String[] args) {
-        DataRetriever dataRetriever = new DataRetriever();
-        int[] dishIds = {1, 2, 3, 4, 5};
-        for (int id : dishIds) {
-            Dish dish = dataRetriever.findDishById(id);
-            System.out.println("Plat : " + dish.getName());
+        DataRetriever dr = new DataRetriever();
 
-            try {
-                System.out.println("Coût = " + dish.getDishCost());
-            } catch (Exception e) {
-                System.out.println("Erreur coût : " + e.getMessage());
-            }
+        Instant t = LocalDateTime
+                .of(2024, 1, 6, 12, 0)
+                .toInstant(ZoneOffset.UTC);
 
-            try {
-                System.out.println("Marge = " + dish.getGrossMargin());
-            } catch (Exception e) {
-                System.out.println("Marge : Exception (prix NULL)");
-            }
+        for (int id = 1; id <= 5; id++) {
+            Ingredient ingredient = dr.findIngredientById(id);
+            StockValue stock = ingredient.getStockValueAt(t);
+
+            System.out.println(
+                    ingredient.getName()
+                            + " stock = "
+                            + stock.getQuantity()
+                            + " "
+                            + stock.getUnit()
+            );
         }
-
     }
 }

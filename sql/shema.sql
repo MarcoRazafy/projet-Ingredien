@@ -10,6 +10,8 @@ create table dish
 
 create type ingredient_category as enum ('VEGETABLE', 'ANIMAL', 'MARINE', 'DAIRY', 'OTHER');
 
+
+
 create table ingredient
 (
     id       serial primary key,
